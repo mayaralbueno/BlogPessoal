@@ -1,6 +1,6 @@
 # BlogPessoal
 
-⚠Proteo desenvolvido no curso Generation Brasil,realizamos no segundo modulo toda a parte de back-end para aplicações web.No final desse bloco  realizamos um deploy do nosso back-end, utilizando a tecnologia Docker.
+⚠Projeto desenvolvido no curso Generation Brasil,realizamos no segundo modulo toda a parte de back-end para aplicações web.No final desse bloco  realizamos um deploy do nosso back-end, utilizando a tecnologia Docker.
 
 
 
