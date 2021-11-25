@@ -2,8 +2,10 @@ package org.generation.blogpessoal.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.apache.catalina.startup.ClassLoaderFactory.RepositoryType;
-import org.generation.blogpessoal.model.tema;
+import org.generation.blogpessoal.model.Tema;
 import org.generation.blogpessoal.repository.TemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,42 +20,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders ="*" )
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/tema")
-public class temaController {
-  
+public class TemaController {
+
 	@Autowired
-	private   TemaRepository repository;
-	
+	private TemaRepository repository;
+
 	@GetMapping
-	public  ResponseEntity<List<tema>> getAll(){
+	public ResponseEntity<List<Tema>> getAll() {
 		return ResponseEntity.ok(repository.findAll());
 	}
-	@GetMapping("{/id}")
-	public ResponseEntity<tema> getByid(@PathVariable long id){
+
+	@GetMapping("/{tema_id}")
+	public ResponseEntity<Tema> getByid(@PathVariable(value = "tema_id") long id) {
 		return repository.findById(id).map(res -> ResponseEntity.ok(res)).orElse(ResponseEntity.notFound().build());
 	}
+
 	@GetMapping("/nome/{nome}")
-	public ResponseEntity<List<tema>> getByname(@PathVariable String nome ){
-		return ResponseEntity.ok(repository. findBydescricaoContainingIgnoreCase(nome));
+	public ResponseEntity<List<Tema>> getByname(@PathVariable(value = "nome") String nome) {
+		return ResponseEntity.ok(repository.findByDescricaoContainingIgnoreCase(nome));
 	}
-	  @PostMapping
-	  public ResponseEntity<tema> post (@RequestBody  tema tema){
-		  return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(tema));
-		  
-	  }
-	  @PutMapping
-	  public ResponseEntity<tema> put (@RequestBody  tema tema){
-		  return ResponseEntity.ok(repository.save(tema));
-	  }
-	  
-	  @DeleteMapping("/{id}")
-	  public void delete(@PathVariable long id){
-		  repository.deleteById(id);
-	  
-		  
-	  }
+
+	@PostMapping("/salvar")
+	public ResponseEntity<Tema> post(@Valid @RequestBody Tema tema) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(tema));
+
+	}
+
+	@PutMapping("/atualizar")
+	public ResponseEntity<Tema> put(@RequestBody Tema tema) {
+		return ResponseEntity.ok(repository.save(tema));
+	}
+
+	@DeleteMapping("/id/{id}")
+	public void delete(@PathVariable(value = "id") long id) {
+		repository.deleteById(id);
+
+	}
 }

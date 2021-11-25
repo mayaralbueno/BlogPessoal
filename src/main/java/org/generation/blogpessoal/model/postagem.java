@@ -3,9 +3,11 @@ package org.generation.blogpessoal.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -13,37 +15,44 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "postagem")
-public class postagem {
+public class Postagem {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-  @NotNull
-  @Size(min = 5, max = 100)
-      String titulo;
-  @NotNull
-  @Size(min = 10, max = 500)
+
+	@NotNull
+	@Size(min = 5, max = 100)
+	String titulo;
+
+	@NotNull
+	@Size(min = 10, max = 500)
 	private String texto;
-  @Temporal(TemporalType.TIMESTAMP)
-	
-	private Date date =new java.sql.Date(System.currentTimeMillis());
-     @ManyToOne
-     @JsonIncludeProperties("postagem")
-  
-   private tema tema ;
-   
 
-	public tema getTema() {
-	return tema;
-}
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date date = new java.sql.Date(System.currentTimeMillis());
 
-public void setTema(tema tema) {
-	this.tema = tema;
-}
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "criador_id")
+	@JsonIgnoreProperties("minhasPostagens")
+	private Usuario criador;
+
+	@ManyToOne
+	@JoinColumn(name = "tema_id")
+	@JsonIgnoreProperties("postagem")
+	private Tema tema;
+
+	public Tema getTema() {
+		return tema;
+	}
+
+	public void setTema(Tema tema) {
+		this.tema = tema;
+	}
 
 	public long getId() {
 		return id;
@@ -75,9 +84,14 @@ public void setTema(tema tema) {
 
 	public void setDate(Date date) {
 		this.date = date;
-	};
-	
-	
-	
+	}
+
+	public Usuario getCriador() {
+		return criador;
+	}
+
+	public void setCriador(Usuario criador) {
+		this.criador = criador;
+	}
 
 }
